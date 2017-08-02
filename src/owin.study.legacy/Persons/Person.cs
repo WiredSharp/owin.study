@@ -8,6 +8,8 @@ namespace Owin.Study.Legacy.Persons
 {
     public class Person
     {
-        public string Firstname { get; internal set; }
+        public string Firstname { get; set; }
+
+        public string LastName { get; set; }
     }
 }
