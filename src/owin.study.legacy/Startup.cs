@@ -20,6 +20,7 @@ namespace Owin.Study.Legacy
             //app.UseWelcomePage();
             var config = new System.Web.Http.HttpConfiguration();
             config.MapHttpAttributeRoutes();
+            //config.Formatters.Remove(config.Formatters.JsonFormatter);
             config.Formatters.Insert(0, new PersonMediaTypeJsonFormatter());
     //        config.Routes.MapHttpRoute("defaultApi",
     //routeTemplate: "api/{controller}/{category}/{id}",

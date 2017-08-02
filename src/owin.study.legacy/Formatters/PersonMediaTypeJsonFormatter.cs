@@ -19,7 +19,7 @@ namespace Owin.Study.Legacy.Formatters
     {
         public override bool CanWriteType(Type type)
         {
-            return type == typeof(Person);
+            return true;
         }
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext, CancellationToken cancellationToken)
@@ -30,7 +30,7 @@ namespace Owin.Study.Legacy.Formatters
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
         {
             var serializer = new JsonSerializer() { ContractResolver = ShouldSerializeContractResolver.Instance };
-            using (var writer = new StreamWriter(writeStream, Encoding.UTF8))
+            using (var writer = new StreamWriter(writeStream, Encoding.UTF8, 1024, true))
             {
                 serializer.Serialize(writer, value);
             }
@@ -41,7 +41,7 @@ namespace Owin.Study.Legacy.Formatters
         public override void WriteToStream(Type type, object value, Stream writeStream, Encoding effectiveEncoding)
         {
             var serializer = new JsonSerializer() { ContractResolver = ShouldSerializeContractResolver.Instance };
-            using (var writer = new StreamWriter(writeStream, effectiveEncoding))
+            using (var writer = new StreamWriter(writeStream, Encoding.UTF8, 1024, true))
             {
                 serializer.Serialize(writer, value);
             }
