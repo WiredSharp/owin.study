@@ -1,7 +1,6 @@
-﻿using Owin.Study.Legacy.Formatters;
-using System;
-using System.Collections.Generic;
-using System.Web.Http;
+﻿using System.Web.Http;
+using Microsoft.Owin.Logging;
+using Serilog;
 
 [assembly: Microsoft.Owin.OwinStartup(typeof(Owin.Study.Legacy.Startup))]
 
@@ -11,21 +10,18 @@ namespace Owin.Study.Legacy
     {
         public void Configuration(IAppBuilder app)
         {
-            //app.Use(new Func<object, object>(
-            //   x => new Middleware(new List<Route>
-            //   {
-            // new Route("Demo", typeof (DemoController))
-            //   })
-            //));
-            //app.UseWelcomePage();
-            var config = new System.Web.Http.HttpConfiguration();
+            Serilog.ILogger logger = new LoggerConfiguration()
+                                        .Enrich.FromLogContext()
+                                        .WriteTo.ColoredConsole()
+                                        .CreateLogger();
+            app.SetLoggerFactory(new SeriLoggerFactory(logger));
+            app.Use<SerilogRequestContext>(logger);
+            app.Use<LoggingMiddleware>(app.CreateLogger<LoggingMiddleware>());
+            var config = new HttpConfiguration();
+            config.EnableSystemDiagnosticsTracing();
             config.MapHttpAttributeRoutes();
-            //config.Formatters.Remove(config.Formatters.JsonFormatter);
-            config.Formatters.Insert(0, new PersonMediaTypeJsonFormatter());
-    //        config.Routes.MapHttpRoute("defaultApi",
-    //routeTemplate: "api/{controller}/{category}/{id}",
-    //defaults: new { category = "all", id = RouteParameter.Optional });
             app.UseWebApi(config);
+            logger.Information("startup completed");
         }
     }
 }
