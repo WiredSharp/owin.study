@@ -1,7 +1,5 @@
 ﻿using Owin.Study.Legacy.Persons;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Formatting;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +13,9 @@ using System.Threading;
 
 namespace Owin.Study.Legacy.Formatters
 {
+    /// <summary>
+    /// allow to filter certain properties during output generation
+    /// </summary>
     internal class PersonMediaTypeJsonFormatter : JsonMediaTypeFormatter
     {
         public override bool CanWriteType(Type type)

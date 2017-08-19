@@ -28,9 +28,10 @@ namespace Owin.Study.Legacy
         {
             get
             {
-                var constraints = new HttpRouteValueDictionary();
-                constraints.Add("version", new VersionConstraint(AllowedVersion));
-                return constraints;
+                return new HttpRouteValueDictionary
+                {
+                    { "version", new VersionConstraint(AllowedVersion) }
+                };
             }
         }
     }
