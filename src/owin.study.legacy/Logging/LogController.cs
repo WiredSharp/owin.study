@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Serilog;
+using System;
 using System.Web.Http;
 
 namespace Owin.Study.Legacy.Logging
@@ -12,17 +9,21 @@ namespace Owin.Study.Legacy.Logging
     {
         private readonly ILogRepository _logRepository;
 
-        //public LogController(ILogRepository logRepository)
-        //{
-        //    if (logRepository == null) throw new ArgumentNullException(nameof(logRepository));
-        //    _logRepository = logRepository;
-        //}
+        private ILogger Logger = Log.ForContext<LogController>();
+
+        public LogController(ILogRepository logRepository)
+        {
+            if (logRepository == null) throw new ArgumentNullException(nameof(logRepository));
+            _logRepository = logRepository;
+        }
 
         [HttpGet]
         [Route("")]
-        public string GetLogs()
+        public IHttpActionResult GetLogs()
         {
-            return "hello world";
+            LogEntry[] logs = _logRepository.GetLastLogs();
+            return Ok(logs);
+            //return new HtmlResult(System.Net.HttpStatusCode.OK,"<html><head/><body><h1>Hello World !!</h1></body></<html>");
         }
 
         //[Route("")]
